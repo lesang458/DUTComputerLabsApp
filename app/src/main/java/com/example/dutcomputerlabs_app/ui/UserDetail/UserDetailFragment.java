@@ -157,6 +157,7 @@ public class UserDetailFragment extends Fragment {
                             for(Faculty faculty : list){
                                 map.put(faculty.getName(),faculty.getId());
                             }
+                            list_faculties.clear();
                             list_faculties = new ArrayList<>(map.keySet());
                             setSpinner_faculty_adapter();
                             editInfo();
