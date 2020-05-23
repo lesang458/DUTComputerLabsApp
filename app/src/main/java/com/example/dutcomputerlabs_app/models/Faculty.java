@@ -1,7 +1,11 @@
 package com.example.dutcomputerlabs_app.models;
 
+import com.google.gson.annotations.Expose;
+
 public class Faculty {
+    @Expose
     private int Id;
+    @Expose
     private String Name;
 
     public int getId() {

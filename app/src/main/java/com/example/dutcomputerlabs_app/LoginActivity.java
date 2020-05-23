@@ -72,8 +72,10 @@ public class LoginActivity extends AppCompatActivity {
                                 userToken = response.body();
                                 if(!userToken.getRoleName().equals("MANAGER")){
                                     SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
+                                    pref.edit().putString("token","Bearer "+userToken.getToken()).apply();
                                     pref.edit().putString("password",pass_word).apply();
                                     pref.edit().putInt("id",userToken.getUserId()).apply();
+                                    pref.edit().putInt("editMode",1).apply();
                                     Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                                     startActivity(intent);
                                     LoginActivity.this.finish();

@@ -105,10 +105,38 @@
                     android:text="Đặt Phòng"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/border_button" />
+                <Button
+                    android:id="@+id/btn_update_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="20sp"
+                    android:text="Cập nhật"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/border_button"
+                    />
 
             </RelativeLayout>
-
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/ic_description"
+            android:text=" Mô tả:"/>
+        <EditText
+            android:id="@+id/description"
+            android:textSize="20sp"
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="textMultiLine"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

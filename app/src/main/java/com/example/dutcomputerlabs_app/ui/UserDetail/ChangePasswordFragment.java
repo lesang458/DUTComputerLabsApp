@@ -90,9 +90,10 @@ public class ChangePasswordFragment extends Fragment {
                         err_confirm_new_password.setText("");
                         SharedPreferences pref = getActivity().getSharedPreferences("PREF", Context.MODE_PRIVATE);
                         int id = pref.getInt("id",1);
+                        String token = pref.getString("token","");
                         passwordToUpdate = new PasswordToUpdate(oldPassword,newPassword);
                         userService = ApiUtils.getUserService();
-                        userService.changePassword(id,passwordToUpdate).enqueue(new Callback<Void>() {
+                        userService.changePassword(token,id,passwordToUpdate).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if(response.isSuccessful()){

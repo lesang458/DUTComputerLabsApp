@@ -10,20 +10,21 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserService {
-    @POST("/api/users/{id}/password")
-    Call<Void> changePassword(@Path("id") int id, @Body PasswordToUpdate passwordToUpdate);
-
     @GET("/api/users/{id}")
-    Call<UserForDetailed> getUser(@Path("id") int id);
+    Call<UserForDetailed> getUser(@Header("Authorization") String token, @Path("id") int id);
+
+    @POST("/api/users/{id}/password")
+    Call<Void> changePassword(@Header("Authorization") String token, @Path("id") int id, @Body PasswordToUpdate passwordToUpdate);
 
     @GET("/api/users/faculties")
-    Call<List<Faculty>> getFaculties();
+    Call<List<Faculty>> getFaculties(@Header("Authorization") String token);
 
     @PUT("/api/users/{id}/info")
-    Call<UserForDetailed> updateUserInfo(@Path("id") int id, @Body UserForInsert userForInsert);
+    Call<UserForDetailed> updateUserInfo(@Header("Authorization") String token,@Path("id") int id, @Body UserForInsert userForInsert);
 }

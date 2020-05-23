@@ -46,6 +46,7 @@ public class UserDetailFragment extends Fragment {
     private UserForDetailed userDetail;
     private UserService userService;
     private int id;
+    private String token;
     private Map<String,Integer> map;
     private List<String> list_genders, list_faculties;
     private ArrayAdapter<String> spinner_gender_adapter,spinner_faculty_adapter;
@@ -96,6 +97,7 @@ public class UserDetailFragment extends Fragment {
 
         SharedPreferences pref = getActivity().getSharedPreferences("PREF", Context.MODE_PRIVATE);
         id = pref.getInt("id",1);
+        token = pref.getString("token","");
 
         userService = ApiUtils.getUserService();
 
@@ -148,7 +150,7 @@ public class UserDetailFragment extends Fragment {
         btn_change_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userService.getFaculties().enqueue(new Callback<List<Faculty>>() {
+                userService.getFaculties(token).enqueue(new Callback<List<Faculty>>() {
                     @Override
                     public void onResponse(Call<List<Faculty>> call, Response<List<Faculty>> response) {
                         if(response.isSuccessful()){
@@ -158,7 +160,7 @@ public class UserDetailFragment extends Fragment {
                                 map.put(faculty.getName(),faculty.getId());
                             }
                             list_faculties.clear();
-                            list_faculties = new ArrayList<>(map.keySet());
+                            list_faculties.addAll(map.keySet());
                             setSpinner_faculty_adapter();
                             editInfo();
                         }
@@ -194,13 +196,12 @@ public class UserDetailFragment extends Fragment {
                 String email_update = email.getText().toString().trim();
                 String address_update = address.getText().toString().trim();
                 String pass_word = pref.getString("password","");
-
                 if(name_update.equals("") || phone_number_update.equals("") || email_update.equals("") || address_update.equals("")){
                     DialogUtils.showDialog("Vui lòng nhập đủ thông tin.","Thông báo",getActivity());
                 }
                 if(!name_update.equals("") && !phone_number_update.equals("") && !email_update.equals("") && !address_update.equals("")) {
                     UserForInsert userForInsert = new UserForInsert(name_update,birthday_update,gender_update,faculty_update,phone_number_update,email_update,address_update,userDetail.getUsername(),pass_word,userDetail.getRole());
-                    userService.updateUserInfo(id,userForInsert).enqueue(new Callback<UserForDetailed>() {
+                    userService.updateUserInfo(token,id,userForInsert).enqueue(new Callback<UserForDetailed>() {
                         @Override
                         public void onResponse(Call<UserForDetailed> call, Response<UserForDetailed> response) {
                             if(response.isSuccessful()){
@@ -278,7 +279,7 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void getUser(){
-        userService.getUser(id).enqueue(new Callback<UserForDetailed>() {
+        userService.getUser(token,id).enqueue(new Callback<UserForDetailed>() {
             @Override
             public void onResponse(Call<UserForDetailed> call, Response<UserForDetailed> response) {
                 if(response.isSuccessful()){
