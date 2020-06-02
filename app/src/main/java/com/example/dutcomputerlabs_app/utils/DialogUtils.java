@@ -1,6 +1,5 @@
-package com.example.dutcomputerlabs_app.ultis;
+package com.example.dutcomputerlabs_app.utils;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

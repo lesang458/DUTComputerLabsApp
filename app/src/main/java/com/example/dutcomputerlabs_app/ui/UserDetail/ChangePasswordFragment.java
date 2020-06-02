@@ -1,8 +1,6 @@
 package com.example.dutcomputerlabs_app.ui.UserDetail;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -19,9 +17,9 @@ import android.widget.TextView;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.PasswordToUpdate;
-import com.example.dutcomputerlabs_app.ultis.ApiUtils;
+import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.network.services.UserService;
-import com.example.dutcomputerlabs_app.ultis.DialogUtils;
+import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,23 +68,23 @@ public class ChangePasswordFragment extends Fragment {
                 String newPassword = new_password.getText().toString().trim();
                 String confirmPassword = comfirm_new_password.getText().toString().trim();
 
-                if(oldPassword.equals("")){
+                if(oldPassword.equals("")) {
                     err_old_password.setText("Vui lòng nhập mật khẩu cũ");
                 }else {
                     err_old_password.setText("");
                 }
-                if(newPassword.equals("")){
+                if(newPassword.equals("")) {
                     err_new_password.setText("Vui lòng nhập mật khẩu mới");
                 }else {
                     err_new_password.setText("");
                 }
-                if(confirmPassword.equals("")){
+                if(confirmPassword.equals("")) {
                     err_confirm_new_password.setText("Vui lòng xác nhận mật khẩu mới");
                 }else{
                     err_confirm_new_password.setText("");
                 }
-                if(!oldPassword.equals("") && !newPassword.equals("") && !confirmPassword.equals("")){
-                    if(newPassword.equals(confirmPassword)){
+                if(!oldPassword.equals("") && !newPassword.equals("") && !confirmPassword.equals("")) {
+                    if(newPassword.equals(confirmPassword)) {
                         err_confirm_new_password.setText("");
                         SharedPreferences pref = getActivity().getSharedPreferences("PREF", Context.MODE_PRIVATE);
                         int id = pref.getInt("id",1);
@@ -96,11 +94,11 @@ public class ChangePasswordFragment extends Fragment {
                         userService.changePassword(token,id,passwordToUpdate).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
-                                if(response.isSuccessful()){
+                                if(response.isSuccessful()) {
                                     pref.edit().putString("password",newPassword);
                                     clearText();
                                     DialogUtils.showDialog("Bạn đã đổi mật khẩu thành công.","Thông báo",getActivity());
-                                }else{
+                                }else {
                                     clearText();
                                     DialogUtils.showDialog("Mật khẩu cũ không đúng.","Thông báo",getActivity());
                                 }

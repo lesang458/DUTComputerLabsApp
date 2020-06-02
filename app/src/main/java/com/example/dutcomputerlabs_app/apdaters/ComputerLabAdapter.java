@@ -17,8 +17,8 @@ import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.BookingForInsert;
 import com.example.dutcomputerlabs_app.models.ComputerLab;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
-import com.example.dutcomputerlabs_app.ultis.ApiUtils;
-import com.example.dutcomputerlabs_app.ultis.DialogUtils;
+import com.example.dutcomputerlabs_app.utils.ApiUtils;
+import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

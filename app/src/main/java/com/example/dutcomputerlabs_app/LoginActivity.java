@@ -2,8 +2,6 @@ package com.example.dutcomputerlabs_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
@@ -14,9 +12,9 @@ import android.widget.TextView;
 
 import com.example.dutcomputerlabs_app.models.UserForLogin;
 import com.example.dutcomputerlabs_app.models.UserToken;
-import com.example.dutcomputerlabs_app.ultis.ApiUtils;
+import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.network.services.AuthService;
-import com.example.dutcomputerlabs_app.ultis.DialogUtils;
+import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,17 +50,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String user_name = username.getText().toString().trim();
                 String pass_word = password.getText().toString().trim();
-                if(user_name.equals("")){
+                if(user_name.equals("")) {
                     err_username.setText("Enter your username");
-                }else {
+                } else {
                     err_username.setText("");
                 }
-                if(pass_word.equals("")){
+                if(pass_word.equals("")) {
                     err_password.setText("Enter your password");
                 }else {
                     err_password.setText("");
                 }
-                if(!user_name.equals("") && !pass_word.equals("")){
+                if(!user_name.equals("") && !pass_word.equals("")) {
                     user = new UserForLogin(user_name,pass_word);
                     authService = ApiUtils.getAuthService();
                     authService.login(user).enqueue(new Callback<UserToken>() {
@@ -70,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Call<UserToken> call, Response<UserToken> response) {
                             if(response.isSuccessful()){
                                 userToken = response.body();
-                                if(!userToken.getRoleName().equals("MANAGER")){
+                                if(userToken.getRoleName().equals("LECTURER")) {
                                     SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
                                     pref.edit().putString("token","Bearer "+userToken.getToken()).apply();
                                     pref.edit().putString("password",pass_word).apply();
@@ -85,17 +83,17 @@ public class LoginActivity extends AppCompatActivity {
                                     username.setText("");
                                     password.setText("");
                                 }
-                            }else{
+                            } else {
                                 JSONObject jsonObject = null;
-                                try{
+                                try {
                                     jsonObject = new JSONObject(response.errorBody().string());
                                     String message = jsonObject.getString("Message");
-                                    if(message.equals("Người dùng không tồn tại")){
+                                    if(message.equals("Người dùng không tồn tại")) {
                                         err_username.setText(message);
-                                    }else err_password.setText(message);
+                                    } else err_password.setText(message);
                                     username.setText("");
                                     password.setText("");
-                                }catch (JSONException | IOException e) {
+                                } catch (JSONException | IOException e) {
                                     e.printStackTrace();
                                 }
                             }

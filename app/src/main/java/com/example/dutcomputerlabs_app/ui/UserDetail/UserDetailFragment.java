@@ -24,9 +24,9 @@ import com.example.dutcomputerlabs_app.models.Faculty;
 import com.example.dutcomputerlabs_app.models.UserForDetailed;
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.UserForInsert;
-import com.example.dutcomputerlabs_app.ultis.ApiUtils;
+import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.network.services.UserService;
-import com.example.dutcomputerlabs_app.ultis.DialogUtils;
+import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -153,10 +153,10 @@ public class UserDetailFragment extends Fragment {
                 userService.getFaculties(token).enqueue(new Callback<List<Faculty>>() {
                     @Override
                     public void onResponse(Call<List<Faculty>> call, Response<List<Faculty>> response) {
-                        if(response.isSuccessful()){
+                        if(response.isSuccessful()) {
                             List<Faculty> list = response.body();
                             map = new HashMap<>();
-                            for(Faculty faculty : list){
+                            for(Faculty faculty : list) {
                                 map.put(faculty.getName(),faculty.getId());
                             }
                             list_faculties.clear();
@@ -186,7 +186,7 @@ public class UserDetailFragment extends Fragment {
                     e.printStackTrace();
                 }
                 boolean gender_update;
-                if(gender.getText().toString().equals("Nam")){
+                if(gender.getText().toString().equals("Nam")) {
                     gender_update = false;
                 }else {
                     gender_update = true;
@@ -196,7 +196,7 @@ public class UserDetailFragment extends Fragment {
                 String email_update = email.getText().toString().trim();
                 String address_update = address.getText().toString().trim();
                 String pass_word = pref.getString("password","");
-                if(name_update.equals("") || phone_number_update.equals("") || email_update.equals("") || address_update.equals("")){
+                if(name_update.equals("") || phone_number_update.equals("") || email_update.equals("") || address_update.equals("")) {
                     DialogUtils.showDialog("Vui lòng nhập đủ thông tin.","Thông báo",getActivity());
                 }
                 if(!name_update.equals("") && !phone_number_update.equals("") && !email_update.equals("") && !address_update.equals("")) {
@@ -270,7 +270,7 @@ public class UserDetailFragment extends Fragment {
     }
 
     private int getIndex(Spinner spinner, String myString){
-        for (int i=0;i<spinner.getCount();i++){
+        for (int i = 0; i < spinner.getCount(); i++) {
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
                 return i;
             }

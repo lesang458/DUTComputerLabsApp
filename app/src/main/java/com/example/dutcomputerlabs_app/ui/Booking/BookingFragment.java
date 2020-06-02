@@ -1,14 +1,12 @@
-package com.example.dutcomputerlabs_app.ui.booking;
+package com.example.dutcomputerlabs_app.ui.Booking;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +26,8 @@ import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.apdaters.ComputerLabAdapter;
 import com.example.dutcomputerlabs_app.models.ComputerLab;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
-import com.example.dutcomputerlabs_app.ultis.ApiUtils;
-import com.example.dutcomputerlabs_app.ultis.DialogUtils;
+import com.example.dutcomputerlabs_app.utils.ApiUtils;
+import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,12 +154,12 @@ public class BookingFragment extends Fragment {
             public void onClick(View v) {
                 String startAt = start.getText().toString();
                 String endAt = end.getText().toString();
-                if(startAt.equals("")){
+                if(startAt.equals("")) {
                     DialogUtils.showDialog("Ngày không hợp lệ. Vui lòng chọn ngày khác.","Lỗi",getActivity());
-                }else{
-                    if(Integer.parseInt(startAt) > Integer.parseInt(endAt)){
+                } else {
+                    if(Integer.parseInt(startAt) > Integer.parseInt(endAt)) {
                         DialogUtils.showDialog("Tiết bắt đầu lớn hơn tiết kết thúc. Vui lòng chọn lại.","Lỗi",getActivity());
-                    }else{
+                    } else {
                         SharedPreferences pref = getContext().getSharedPreferences("PREF", Context.MODE_PRIVATE);
                         int editMode = pref.getInt("editMode",-1);
                         if(editMode != -1){
@@ -172,14 +170,14 @@ public class BookingFragment extends Fragment {
                             .enqueue(new Callback<List<ComputerLab>>() {
                                 @Override
                                 public void onResponse(Call<List<ComputerLab>> call, Response<List<ComputerLab>> response) {
-                                    if(response.isSuccessful()){
+                                    if(response.isSuccessful()) {
                                         computerLabList.clear();
                                         computerLabList.addAll(response.body());
                                         computerLabAdapter.setBookingDate(bookingDate);
                                         computerLabAdapter.setStartAt(startAt);
                                         computerLabAdapter.setEndAt(endAt);
                                         computerLabAdapter.notifyDataSetChanged();
-                                    }else{
+                                    }else {
                                         DialogUtils.showDialog(response.toString(),"Lỗi",getActivity());
                                     }
                                 }
@@ -236,28 +234,28 @@ public class BookingFragment extends Fragment {
         }
         Date date = dateFormat.parse(booking_date.getText().toString());
         Date now = dateFormat.parse(dateFormat.format(new Date()));
-        if(date.compareTo(now) > 0){
-            if(session.getText().toString().equals("Buổi sáng")){
-                for(int i = 1; i <=5; i++){
+        if(date.compareTo(now) > 0) {
+            if(session.getText().toString().equals("Buổi sáng")) {
+                for(int i = 1; i <= 5; i++) {
                     list_time.add(""+i);
                 }
-            }else{
-                for(int i = 6; i <=10; i++){
+            }else {
+                for(int i = 6; i <=10; i++) {
                     list_time.add(i+"");
                 }
             }
-        }else if(date.compareTo(now) == 0){
+        }else if(date.compareTo(now) == 0) {
             calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            if(session.getText().toString().equals("Buổi sáng")){
-                if(hour >= 6 && hour < 11){
-                    for (int i =1 ; i < 12 - hour; i++){
+            if(session.getText().toString().equals("Buổi sáng")) {
+                if(hour >= 6 && hour < 11) {
+                    for (int i = 1; i < 12 - hour; i++) {
                         list_time.add((hour - 6 + i) + "");
                     }
                 }
-            }else{
-                if(hour >= 12 && hour < 17){
-                    for (int i =1 ; i < 18 - hour; i++){
+            }else {
+                if(hour >= 12 && hour < 17) {
+                    for (int i = 1; i < 18 - hour; i++) {
                         list_time.add((hour - 7 + i) + "");
                     }
                 }
