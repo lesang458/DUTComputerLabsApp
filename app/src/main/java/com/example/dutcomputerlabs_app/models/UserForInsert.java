@@ -6,116 +6,116 @@ import java.util.Date;
 
 public class UserForInsert {
     @Expose
-    private String Name;
+    private String name;
     @Expose
-    private Date Birthday;
+    private Date birthday;
     @Expose
-    private boolean Gender;
+    private boolean gender;
     @Expose
-    private Faculty Faculty;
+    private Faculty faculty;
     @Expose
-    private String PhoneNumber;
+    private String phoneNumber;
     @Expose
-    private String Email;
+    private String email;
     @Expose
-    private String Address;
+    private String address;
     @Expose
-    private String Username;
+    private String username;
     @Expose
-    private String Password;
+    private String password;
     @Expose
-    private String Role;
+    private String role;
 
     public UserForInsert(String name, Date birthday, boolean gender, com.example.dutcomputerlabs_app.models.Faculty faculty, String phoneNumber, String email, String address, String username, String password, String role) {
-        Name = name;
-        Birthday = birthday;
-        Gender = gender;
-        Faculty = faculty;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Address = address;
-        Username = username;
-        Password = password;
-        Role = role;
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.faculty = faculty;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        name = name;
     }
 
     public Date getBirthday() {
-        return Birthday;
+        return birthday;
     }
 
     public void setBirthday(Date birthday) {
-        Birthday = birthday;
+        birthday = birthday;
     }
 
     public boolean isGender() {
-        return Gender;
+        return gender;
     }
 
     public void setGender(boolean gender) {
-        Gender = gender;
+        this.gender = gender;
     }
 
     public com.example.dutcomputerlabs_app.models.Faculty getFaculty() {
-        return Faculty;
+        return faculty;
     }
 
     public void setFaculty(com.example.dutcomputerlabs_app.models.Faculty faculty) {
-        Faculty = faculty;
+        this.faculty = faculty;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getRole() {
-        return Role;
+        return role;
     }
 
     public void setRole(String role) {
-        Role = role;
+        this.role = role;
     }
 }

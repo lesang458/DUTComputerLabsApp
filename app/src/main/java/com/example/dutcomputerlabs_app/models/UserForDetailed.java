@@ -6,116 +6,116 @@ import java.util.Date;
 
 public class UserForDetailed {
     @Expose
-    private int Id;
+    private int id;
     @Expose
-    private String Name;
+    private String name;
     @Expose
-    private Date Birthday;
+    private Date birthday;
     @Expose
-    private String Gender;
+    private String gender;
     @Expose
-    private String Faculty;
+    private String faculty;
     @Expose
-    private String PhoneNumber;
+    private String phoneNumber;
     @Expose
-    private String Email;
+    private String email;
     @Expose
-    private String Address;
+    private String address;
     @Expose
-    private String Username;
+    private String username;
     @Expose
-    private String Role;
+    private String role;
 
     public UserForDetailed(int id, String name, Date birthday, String gender, String faculty, String phoneNumber, String email, String address, String username, String role) {
-        Id = id;
-        Name = name;
-        Birthday = birthday;
-        Gender = gender;
-        Faculty = faculty;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Address = address;
-        Username = username;
-        Role = role;
+        this.id = id;
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.faculty = faculty;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        this.role = role;
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getGender() {
-        return Gender;
+        return gender;
     }
 
     public void setGender(String gender) {
-        Gender = gender;
+        this.gender = gender;
     }
 
     public Date getBirthday() {
-        return Birthday;
+        return birthday;
     }
 
     public void setBirthday(Date birthday) {
-        Birthday = birthday;
+        this.birthday = birthday;
     }
 
     public String getFaculty() {
-        return Faculty;
+        return faculty;
     }
 
     public void setFaculty(String faculty) {
-        Faculty = faculty;
+        this.faculty = faculty;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getRole() {
-        return Role;
+        return role;
     }
 
     public void setRole(String role) {
-        Role = role;
+        this.role = role;
     }
 }

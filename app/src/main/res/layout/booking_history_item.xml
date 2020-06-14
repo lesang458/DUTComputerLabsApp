@@ -31,7 +31,7 @@
                     android:textSize="20sp"
                     android:drawableStart="@drawable/ic_room" />
                 <TextView
-                    android:id="@+id/history_room_name"
+                    android:id="@+id/history_booking_room_name"
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:textSize="20sp" />
@@ -129,6 +129,16 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
                 android:src="@drawable/ic_cancel"
+                android:backgroundTint="@color/colorGreen"
+                android:background="@drawable/border"/>
+
+            <ImageButton
+                android:id="@+id/btn_send_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="25dp"
+                android:src="@drawable/ic_feedback"
                 android:backgroundTint="@color/colorGreen"
                 android:background="@drawable/border"/>
          </LinearLayout>

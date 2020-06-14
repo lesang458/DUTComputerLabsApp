@@ -4,28 +4,28 @@ import com.google.gson.annotations.Expose;
 
 public class PasswordToUpdate {
     @Expose
-    private String OldPassword;
+    private String oldPassword;
     @Expose
-    private String NewPassword;
+    private String newPassword;
 
     public PasswordToUpdate(String oldPassword, String newPassword) {
-        OldPassword = oldPassword;
-        NewPassword = newPassword;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
     }
 
     public String getOldPassword() {
-        return OldPassword;
+        return oldPassword;
     }
 
     public void setOldPassword(String oldPassword) {
-        OldPassword = oldPassword;
+        this.oldPassword = oldPassword;
     }
 
     public String getNewPassword() {
-        return NewPassword;
+        return newPassword;
     }
 
     public void setNewPassword(String newPassword) {
-        NewPassword = newPassword;
+        this.newPassword = newPassword;
     }
 }

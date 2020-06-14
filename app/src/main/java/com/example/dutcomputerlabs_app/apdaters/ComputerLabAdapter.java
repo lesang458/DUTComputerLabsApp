@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.BookingForInsert;
-import com.example.dutcomputerlabs_app.models.ComputerLab;
+import com.example.dutcomputerlabs_app.models.ComputerLabForList;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
 import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.utils.DialogUtils;
@@ -29,8 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ComputerLabAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private List<ComputerLab> list;
+public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHolder> {
+    private List<ComputerLabForList> list;
     private Context mContext;
     private String bookingDate, startAt, endAt;
     private BookingService bookingService;
@@ -47,20 +47,20 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.endAt = endAt;
     }
 
-    public ComputerLabAdapter(List<ComputerLab> list, Context mContext){
+    public ComputerLabAdapter(List<ComputerLabForList> list, Context mContext){
         this.list = list;
         this.mContext = mContext;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ComputerLabViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.computerlab_item,parent,false);
-        return new ViewHolder(view);
+        return new ComputerLabViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ComputerLab computerLab = list.get(position);
+    public void onBindViewHolder(ComputerLabViewHolder holder, int position) {
+        ComputerLabForList computerLab = list.get(position);
         holder.room.setText(computerLab.getName());
         holder.computers.setText(computerLab.getComputers()+"");
         holder.damaged_computer.setText(computerLab.getDamagedComputers()+"");
@@ -92,7 +92,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ViewHolder> {
                         bookingService = ApiUtils.getBookingService();
                         Date date = new Date();
                         try {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                             date = dateFormat.parse(bookingDate);
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -134,13 +134,13 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ViewHolder> {
         notifyDataSetChanged();
     }
 }
-class ViewHolder extends RecyclerView.ViewHolder{
+class ComputerLabViewHolder extends RecyclerView.ViewHolder{
 
-    public TextView room, computers, damaged_computer, air_conditions;
-    public EditText description;
-    public Button btn_booking, btn_update_booking;
+    TextView room, computers, damaged_computer, air_conditions;
+    EditText description;
+    Button btn_booking, btn_update_booking, btn_feedback;
 
-    public ViewHolder(@NonNull View itemView) {
+    ComputerLabViewHolder(@NonNull View itemView) {
         super(itemView);
         room = itemView.findViewById(R.id.room_name);
         computers = itemView.findViewById(R.id.computers);
@@ -149,5 +149,6 @@ class ViewHolder extends RecyclerView.ViewHolder{
         description = itemView.findViewById(R.id.description);
         btn_booking = itemView.findViewById(R.id.btn_booking);
         btn_update_booking = itemView.findViewById(R.id.btn_update_booking);
+        btn_feedback = itemView.findViewById(R.id.btn_feedback);
     }
 }

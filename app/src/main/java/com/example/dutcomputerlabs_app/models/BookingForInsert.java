@@ -4,65 +4,63 @@ import com.google.gson.annotations.Expose;
 
 import java.util.Date;
 
-import retrofit2.http.POST;
-
 public class BookingForInsert {
     @Expose
-    private ComputerLab Lab;
+    private ComputerLabForList lab;
     @Expose
-    private Date BookingDate;
+    private Date bookingDate;
     @Expose
-    private int StartAt;
+    private int startAt;
     @Expose
-    private int EndAt;
+    private int endAt;
     @Expose
-    private String Description;
+    private String description;
 
-    public BookingForInsert(ComputerLab lab, Date bookingDate, int startAt, int endAt, String description) {
-        Lab = lab;
-        BookingDate = bookingDate;
-        StartAt = startAt;
-        EndAt = endAt;
-        Description = description;
+    public BookingForInsert(ComputerLabForList lab, Date bookingDate, int startAt, int endAt, String description) {
+        this.lab = lab;
+        this.bookingDate = bookingDate;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.description = description;
     }
 
-    public ComputerLab getLab() {
-        return Lab;
+    public ComputerLabForList getLab() {
+        return lab;
     }
 
-    public void setLab(ComputerLab lab) {
-        Lab = lab;
+    public void setLab(ComputerLabForList lab) {
+        this.lab = lab;
     }
 
     public Date getBookingDate() {
-        return BookingDate;
+        return bookingDate;
     }
 
     public void setBookingDate(Date bookingDate) {
-        BookingDate = bookingDate;
+        this.bookingDate = bookingDate;
     }
 
     public int getStartAt() {
-        return StartAt;
+        return startAt;
     }
 
     public void setStartAt(int startAt) {
-        StartAt = startAt;
+        this.startAt = startAt;
     }
 
     public int getEndAt() {
-        return EndAt;
+        return endAt;
     }
 
     public void setEndAt(int endAt) {
-        EndAt = endAt;
+        this.endAt = endAt;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 }

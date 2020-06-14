@@ -3,39 +3,28 @@ import com.google.gson.annotations.Expose;
 
 public class UserToken {
     @Expose
-    private String Token;
+    private String token;
     @Expose
-    private int UserId;
-    @Expose
-    private String RoleName;
+    private UserForDetailed user;
 
-    public UserToken(String token, int userId, String roleName) {
-        Token = token;
-        UserId = userId;
-        RoleName = roleName;
+    public UserToken(String token, UserForDetailed user) {
+        this.token = token;
+        this.user = user;
     }
 
     public String getToken() {
-        return Token;
+        return token;
     }
 
     public void setToken(String token) {
-        Token = token;
+        this.token = token;
     }
 
-    public int getUserId() {
-        return UserId;
+    public UserForDetailed getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        UserId = userId;
-    }
-
-    public String getRoleName() {
-        return RoleName;
-    }
-
-    public void setRoleName(String roleName) {
-        RoleName = roleName;
+    public void setUser(UserForDetailed user) {
+        this.user = user;
     }
 }

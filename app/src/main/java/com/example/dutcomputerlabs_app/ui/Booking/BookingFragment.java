@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.apdaters.ComputerLabAdapter;
-import com.example.dutcomputerlabs_app.models.ComputerLab;
+import com.example.dutcomputerlabs_app.models.ComputerLabForList;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
 import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.utils.DialogUtils;
@@ -53,7 +53,7 @@ public class BookingFragment extends Fragment {
     private ComputerLabAdapter computerLabAdapter;
     private ArrayAdapter<String> spinner_session_adapter, spinner_time_adapter;
     private List<String> list_sessions,list_time;
-    private List<ComputerLab> computerLabList;
+    private List<ComputerLabForList> computerLabList;
     private SimpleDateFormat dateFormat;
     private DatePickerDialog datePickerDialog;
     private Calendar calendar;
@@ -70,7 +70,7 @@ public class BookingFragment extends Fragment {
 
         computerLabList = new ArrayList<>();
 
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     @Override
@@ -137,7 +137,7 @@ public class BookingFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         try {
-                            Date date = dateFormat.parse(year+"/"+(month+1)+"/"+dayOfMonth);
+                            Date date = dateFormat.parse(year+"-"+(month+1)+"-"+dayOfMonth);
                             booking_date.setText(dateFormat.format(date));
                             setTimeList();
                         } catch (ParseException e) {
@@ -161,15 +161,14 @@ public class BookingFragment extends Fragment {
                         DialogUtils.showDialog("Tiết bắt đầu lớn hơn tiết kết thúc. Vui lòng chọn lại.","Lỗi",getActivity());
                     } else {
                         SharedPreferences pref = getContext().getSharedPreferences("PREF", Context.MODE_PRIVATE);
-                        int editMode = pref.getInt("editMode",-1);
-                        if(editMode != -1){
-                            String token = pref.getString("token","");
-                            bookingService = ApiUtils.getBookingService();
-                            String bookingDate = booking_date.getText().toString();
-                            bookingService.search(token,bookingDate,Integer.parseInt(startAt),Integer.parseInt(endAt),editMode)
-                            .enqueue(new Callback<List<ComputerLab>>() {
+                        int editMode = pref.getInt("editMode",0);
+                        String token = pref.getString("token","");
+                        bookingService = ApiUtils.getBookingService();
+                        String bookingDate = booking_date.getText().toString();
+                        bookingService.search(token,bookingDate,Integer.parseInt(startAt),Integer.parseInt(endAt),editMode)
+                                .enqueue(new Callback<List<ComputerLabForList>>() {
                                 @Override
-                                public void onResponse(Call<List<ComputerLab>> call, Response<List<ComputerLab>> response) {
+                                public void onResponse(Call<List<ComputerLabForList>> call, Response<List<ComputerLabForList>> response) {
                                     if(response.isSuccessful()) {
                                         computerLabList.clear();
                                         computerLabList.addAll(response.body());
@@ -183,11 +182,11 @@ public class BookingFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Call<List<ComputerLab>> call, Throwable t) {
+                                public void onFailure(Call<List<ComputerLabForList>> call, Throwable t) {
                                     DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",getActivity());
                                 }
                             });
-                            }
+
                         }
                     }
                 }

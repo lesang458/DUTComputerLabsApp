@@ -4,33 +4,33 @@ import com.google.gson.annotations.Expose;
 
 public class Faculty {
     @Expose
-    private int Id;
+    private int id;
     @Expose
-    private String Name;
+    private String name;
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public Faculty(int id, String name) {
-        Id = id;
-        Name = name;
+        this.id = id;
+        this.name = name;
     }
 
     public Faculty(Faculty faculty){
-        Id = faculty.getId();
-        Name = faculty.getName();
+        id = faculty.getId();
+        name = faculty.getName();
     }
 }

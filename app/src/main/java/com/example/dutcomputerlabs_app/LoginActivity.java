@@ -68,12 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Call<UserToken> call, Response<UserToken> response) {
                             if(response.isSuccessful()){
                                 userToken = response.body();
-                                if(userToken.getRoleName().equals("LECTURER")) {
+                                if(userToken.getUser().getRole().equals("LECTURER")) {
                                     SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
                                     pref.edit().putString("token","Bearer "+userToken.getToken()).apply();
                                     pref.edit().putString("password",pass_word).apply();
-                                    pref.edit().putInt("id",userToken.getUserId()).apply();
-                                    pref.edit().putInt("editMode",1).apply();
+                                    pref.edit().putInt("id",userToken.getUser().getId()).apply();
                                     Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                                     startActivity(intent);
                                     LoginActivity.this.finish();
@@ -87,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(response.errorBody().string());
-                                    String message = jsonObject.getString("Message");
+                                    String message = jsonObject.getString("message");
                                     if(message.equals("Người dùng không tồn tại")) {
                                         err_username.setText(message);
                                     } else err_password.setText(message);

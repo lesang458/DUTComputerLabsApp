@@ -1,5 +1,6 @@
 package com.example.dutcomputerlabs_app.ui.UserDetail;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -85,11 +86,12 @@ public class UserDetailFragment extends Fragment {
         return  root;
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         list_genders = new ArrayList<>();
         list_genders.add("Nam");
@@ -136,7 +138,7 @@ public class UserDetailFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         try {
-                            Date date = dateFormat.parse(dayOfMonth+"/"+(month+1)+"/"+year);
+                            Date date = dateFormat.parse(year+"-"+(month+1)+"-"+dayOfMonth);
                             birthday.setText(dateFormat.format(date));
                         } catch (ParseException e) {
                             e.printStackTrace();
