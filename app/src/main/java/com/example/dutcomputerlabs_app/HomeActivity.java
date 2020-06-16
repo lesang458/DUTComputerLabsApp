@@ -1,8 +1,10 @@
 package com.example.dutcomputerlabs_app;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 
 import com.google.android.material.navigation.NavigationView;
@@ -38,6 +40,11 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        View header = navigationView.getHeaderView(0);
+        SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
+        TextView text_name = header.findViewById(R.id.text_name);
+        text_name.setText("Welcome, "+pref.getString("username",""));
     }
 
     @Override

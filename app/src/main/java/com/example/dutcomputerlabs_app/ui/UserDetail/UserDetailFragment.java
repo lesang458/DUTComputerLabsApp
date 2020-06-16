@@ -111,7 +111,6 @@ public class UserDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         getUser();
-
         spinner_gender_adapter = new ArrayAdapter<>(view.getContext(),android.R.layout.simple_spinner_item,list_genders);
         spinner_gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_gender.setAdapter(spinner_gender_adapter);

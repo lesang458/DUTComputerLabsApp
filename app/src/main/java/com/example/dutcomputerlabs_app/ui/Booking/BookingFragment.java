@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.apdaters.ComputerLabAdapter;
@@ -156,9 +157,13 @@ public class BookingFragment extends Fragment {
                 String endAt = end.getText().toString();
                 if(startAt.equals("")) {
                     DialogUtils.showDialog("Ngày không hợp lệ. Vui lòng chọn ngày khác.","Lỗi",getActivity());
+                    computerLabList.clear();
+                    computerLabAdapter.notifyDataSetChanged();
                 } else {
                     if(Integer.parseInt(startAt) > Integer.parseInt(endAt)) {
                         DialogUtils.showDialog("Tiết bắt đầu lớn hơn tiết kết thúc. Vui lòng chọn lại.","Lỗi",getActivity());
+                        computerLabList.clear();
+                        computerLabAdapter.notifyDataSetChanged();
                     } else {
                         SharedPreferences pref = getContext().getSharedPreferences("PREF", Context.MODE_PRIVATE);
                         int editMode = pref.getInt("editMode",0);

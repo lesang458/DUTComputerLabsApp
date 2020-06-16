@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,8 +43,8 @@ public class BookingHistoryFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private BookingService bookingService;
-    private ArrayAdapter<String> spinner_page_adapter;
-    private List<String> list_pages;
+    private ArrayAdapter<Integer> spinner_page_adapter;
+    private List<Integer> list_pages;
     private BookingHistoryAdapter bookingHistoryAdapter;
     private List<BookingForDetailed> list_bookings;
 
@@ -87,7 +88,7 @@ public class BookingHistoryFragment extends Fragment {
                         object = new JSONObject(response.body().string());
                         int page = object.getInt("totalPages");
                         if(page == 1){
-                            text_page.setVisibility(View.INVISIBLE);
+                            text_page.setText(page+"");
                             spinner_page.setVisibility(View.INVISIBLE);
                             bookingService.getBookings(token,page).enqueue(new Callback<List<BookingForDetailed>>() {
                                 @Override
@@ -102,6 +103,41 @@ public class BookingHistoryFragment extends Fragment {
                                 @Override
                                 public void onFailure(Call<List<BookingForDetailed>> call, Throwable t) {
                                     DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",getActivity());
+                                }
+                            });
+                        } else {
+                            for(int i = 1; i <= page; i++) {
+                                list_pages.add(i);
+                            }
+                            spinner_page_adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,list_pages);
+                            spinner_page_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinner_page.setAdapter(spinner_page_adapter);
+
+                            spinner_page.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    text_page.setText(spinner_page.getSelectedItem()+"");
+                                    bookingService.getBookings(token, (Integer) spinner_page.getSelectedItem())
+                                            .enqueue(new Callback<List<BookingForDetailed>>() {
+                                                @Override
+                                                public void onResponse(Call<List<BookingForDetailed>> call, Response<List<BookingForDetailed>> response) {
+                                                    if(response.isSuccessful()){
+                                                        list_bookings.clear();
+                                                        list_bookings.addAll(response.body());
+                                                        bookingHistoryAdapter.notifyDataSetChanged();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<List<BookingForDetailed>> call, Throwable t) {
+                                                    DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",getActivity());
+                                                }
+                                            });
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
                                 }
                             });
                         }
