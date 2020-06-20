@@ -1,35 +1,47 @@
 package com.example.dutcomputerlabs_app.apdaters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.BookingForInsert;
 import com.example.dutcomputerlabs_app.models.ComputerLabForList;
+import com.example.dutcomputerlabs_app.models.FeedbackForDetailed;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
-import com.example.dutcomputerlabs_app.ui.BookingHistory.BookingHistoryFragment;
+import com.example.dutcomputerlabs_app.network.services.FeedbackService;
 import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,7 +119,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        if(response.isSuccessful()){
+                                        if(response.isSuccessful()) {
                                             DialogUtils.showDialog("Đặt phòng thành công","Thông báo",mContext);
                                             clearData();
                                         }else {
@@ -152,14 +164,11 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        if(response.isSuccessful()){
+                                        if(response.isSuccessful()) {
                                             DialogUtils.showDialog("Cập nhật thành công","Thông báo",mContext);
                                             clearData();
                                             pref.edit().remove("editMode").apply();
-                                            Fragment fragment = new BookingHistoryFragment();
-                                            AppCompatActivity activity = (AppCompatActivity) mContext;
-                                            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                                            fragmentManager.beginTransaction().replace(R.id.nav_host_fragment,fragment).commit();
+                                            Navigation.findNavController((Activity) mContext, R.id.nav_host_fragment).navigate(R.id.nav_booking_history);
                                         }else {
                                             DialogUtils.showDialog(response.toString(),"Lỗi",mContext);
                                         }
@@ -181,6 +190,130 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+
+        holder.btn_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences pref = mContext.getSharedPreferences("PREF", Context.MODE_PRIVATE);
+                String token = pref.getString("token","");
+
+                FeedbackService feedbackService = ApiUtils.getFeedbackService();
+
+                feedbackService.getTotalPages(token,computerLab.getId())
+                        .enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if(response.isSuccessful()) {
+                                    JSONObject object = null;
+                                    try {
+                                        object = new JSONObject(response.body().string());
+                                        int page = object.getInt("totalPages");
+                                        if(page == 0) {
+                                            DialogUtils.showDialog("Phòng này chưa có phản hồi nào.",computerLab.getName(),mContext);
+                                        }else {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                            builder.setTitle(computerLab.getName());
+
+                                            View view = LayoutInflater.from(mContext).inflate(R.layout.feedbacks_dialog, null);
+                                            TextView text_page = view.findViewById(R.id.text_feedback_page);
+                                            Spinner spinner = (Spinner) view.findViewById(R.id.spinner_feedback_page);
+                                            RecyclerView recyclerView = view.findViewById(R.id.recyclerview_feedback);
+
+                                            List<FeedbackForDetailed> list = new ArrayList<>();
+                                            FeedbackAdapter feedbackAdapter = new FeedbackAdapter(mContext,list);
+                                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+
+                                            recyclerView.setAdapter(feedbackAdapter);
+                                            recyclerView.setLayoutManager(linearLayoutManager);
+
+                                            if( page == 1){
+                                                spinner.setVisibility(View.INVISIBLE);
+                                                text_page.setText(page+"");
+                                                feedbackService.getFeedbacks(token,computerLab.getId(),1)
+                                                        .enqueue(new Callback<List<FeedbackForDetailed>>() {
+                                                            @Override
+                                                            public void onResponse(Call<List<FeedbackForDetailed>> call, Response<List<FeedbackForDetailed>> response) {
+                                                                if(response.isSuccessful()){
+                                                                    list.clear();
+                                                                    list.addAll(response.body());
+                                                                    feedbackAdapter.notifyDataSetChanged();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<List<FeedbackForDetailed>> call, Throwable t) {
+                                                                DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",mContext);
+                                                            }
+                                                        });
+
+                                            }else {
+                                                List<Integer> list_pages = new ArrayList<>();
+                                                for(int i = 1; i <= page; i++) {
+                                                    list_pages.add(i);
+                                                }
+
+                                                ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item,list_pages);
+                                                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                spinner.setAdapter(arrayAdapter);
+
+                                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                    @Override
+                                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                        feedbackService.getFeedbacks(token,computerLab.getId(), (Integer) spinner.getSelectedItem())
+                                                                .enqueue(new Callback<List<FeedbackForDetailed>>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<List<FeedbackForDetailed>> call, Response<List<FeedbackForDetailed>> response) {
+                                                                        if(response.isSuccessful()){
+                                                                            list.clear();
+                                                                            list.addAll(response.body());
+                                                                            feedbackAdapter.notifyDataSetChanged();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<List<FeedbackForDetailed>> call, Throwable t) {
+                                                                        DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",mContext);
+                                                                    }
+                                                                });
+                                                    }
+
+                                                    @Override
+                                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                                    }
+                                                });
+                                            }
+
+                                            builder.setView(view);
+                                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            });
+
+                                            AlertDialog alertDialog = builder.create();
+                                            alertDialog.show();
+                                            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackground(mContext.getDrawable(R.drawable.border_button));
+                                            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+                                            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",mContext);
+                            }
+                        });
             }
         });
     }

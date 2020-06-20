@@ -187,7 +187,6 @@
             android:inputType="textMultiLine"
             android:enabled="false"
             android:imeOptions="actionDone"
-            android:singleLine="true"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             android:background="@drawable/border" />

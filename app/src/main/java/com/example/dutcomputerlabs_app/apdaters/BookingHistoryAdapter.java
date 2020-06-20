@@ -1,9 +1,8 @@
 package com.example.dutcomputerlabs_app.apdaters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -12,16 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.models.BookingForDetailed;
-import com.example.dutcomputerlabs_app.ui.Booking.BookingFragment;
+import com.example.dutcomputerlabs_app.models.FeedbackForDetailed;
+import com.example.dutcomputerlabs_app.models.FeedbackForInsert;
 import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.utils.DialogUtils;
 
@@ -85,10 +88,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingViewHolde
                         SharedPreferences pref = mContext.getSharedPreferences("PREF",Context.MODE_PRIVATE);
                         pref.edit().putInt("editMode",1).apply();
                         pref.edit().putInt("bookingId",booking.getId()).apply();
-                        Fragment bookingFragment = new BookingFragment();
-                        AppCompatActivity activity = (AppCompatActivity) mContext;
-                        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment,bookingFragment).commit();
+                        Navigation.findNavController((Activity)mContext,R.id.nav_host_fragment).navigate(R.id.nav_booking);
                     }
                 });
 
@@ -177,7 +177,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingViewHolde
                 builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 });
 
@@ -186,6 +186,89 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingViewHolde
                 alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackground(mContext.getDrawable(R.drawable.border_button));
                 alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
                 alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
+            }
+        });
+
+        holder.btn_send_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final TextView text_booking_room, text_booking_date, text_booking_time;
+                final EditText feedback;
+                View view = LayoutInflater.from(mContext).inflate(R.layout.send_feedback_dialog, null);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Gửi phản hồi");
+
+                text_booking_room = view.findViewById(R.id.text_booking_room);
+                text_booking_date = view.findViewById(R.id.text_booking_date);
+                text_booking_time = view.findViewById(R.id.text_booking_time);
+                feedback = view.findViewById(R.id.feedback);
+
+                text_booking_room.setText(booking.getLab().getName());
+                text_booking_date.setText(dateFormat.format(booking.getBookingDate()));
+                text_booking_time.setText(booking.getStartAt()+" - "+booking.getEndAt());
+
+                builder.setView(view);
+
+                builder.setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                Button send = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                Button cancel = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                send.setBackground(mContext.getDrawable(R.drawable.border_button));
+                send.setTextSize(20);
+                send.setTextColor(Color.BLACK);
+
+                send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(feedback.getText().toString().trim().equals("")){
+                            Toast.makeText(mContext,"Vui lòng nhập phản hồi",Toast.LENGTH_SHORT).show();
+                        }else{
+                            String token = mContext.getSharedPreferences("PREF",Context.MODE_PRIVATE).getString("token","");
+                            FeedbackForInsert feedbackForInsert = new FeedbackForInsert(booking.getId(),feedback.getText().toString().trim());
+                            ApiUtils.getFeedbackService().addFeedback(token,feedbackForInsert)
+                                    .enqueue(new Callback<FeedbackForDetailed>() {
+                                        @Override
+                                        public void onResponse(Call<FeedbackForDetailed> call, Response<FeedbackForDetailed> response) {
+                                            if(response.isSuccessful()){
+                                                alertDialog.dismiss();
+                                                DialogUtils.showDialog("Gửi phản hồi thành công","Thông báo",mContext);
+                                                booking.setFeedback(response.body());
+                                                notifyDataSetChanged();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<FeedbackForDetailed> call, Throwable t) {
+                                            alertDialog.dismiss();
+                                            DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",mContext);
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+                cancel.setBackground(mContext.getDrawable(R.drawable.border_button));
+                cancel.setTextSize(20);
+                cancel.setTextColor(Color.BLACK);
+
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) cancel.getLayoutParams();
+                params.setMargins(0, 0, 30, 0); //left, top, right, bottom
+                cancel.setLayoutParams(params);
+
             }
         });
     }
@@ -214,4 +297,3 @@ class BookingViewHolder extends RecyclerView.ViewHolder {
         btn_send_feedback = itemView.findViewById(R.id.btn_send_feedback);
     }
 }
-

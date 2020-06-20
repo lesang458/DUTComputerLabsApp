@@ -31,7 +31,7 @@ import retrofit2.Response;
 public class ChangePasswordFragment extends Fragment {
 
     private PasswordToUpdate passwordToUpdate;
-    private EditText old_password, new_password, comfirm_new_password;
+    private EditText old_password, new_password, confirm_new_password;
     private TextView err_old_password, err_new_password, err_confirm_new_password;
     private Button btnSave;
     private UserService userService;
@@ -44,7 +44,7 @@ public class ChangePasswordFragment extends Fragment {
 
         old_password = root.findViewById(R.id.old_password);
         new_password = root.findViewById(R.id.new_password);
-        comfirm_new_password = root.findViewById(R.id.confirm_new_password);
+        confirm_new_password = root.findViewById(R.id.confirm_new_password);
         err_old_password = root.findViewById(R.id.text_err_old_password);
         err_new_password = root.findViewById(R.id.text_err_new_password);
         err_confirm_new_password = root.findViewById(R.id.text_err_confirm_new_password);
@@ -66,7 +66,7 @@ public class ChangePasswordFragment extends Fragment {
             public void onClick(View v) {
                 String oldPassword = old_password.getText().toString().trim();
                 String newPassword = new_password.getText().toString().trim();
-                String confirmPassword = comfirm_new_password.getText().toString().trim();
+                String confirmPassword = confirm_new_password.getText().toString().trim();
 
                 if(oldPassword.equals("")) {
                     err_old_password.setText("Vui lòng nhập mật khẩu cũ");
@@ -121,6 +121,6 @@ public class ChangePasswordFragment extends Fragment {
     public void clearText(){
         old_password.setText("");
         new_password.setText("");
-        comfirm_new_password.setText("");
+        confirm_new_password.setText("");
     }
 }

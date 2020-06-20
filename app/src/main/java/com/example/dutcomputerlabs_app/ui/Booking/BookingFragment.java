@@ -21,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dutcomputerlabs_app.R;
 import com.example.dutcomputerlabs_app.apdaters.ComputerLabAdapter;
@@ -199,6 +198,12 @@ public class BookingFragment extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getSharedPreferences("PREF",Context.MODE_PRIVATE).edit().remove("editMode").apply();
+    }
+
     public void setSpinnerAdapter(){
         start.setText("");
         end.setText("");
@@ -256,11 +261,19 @@ public class BookingFragment extends Fragment {
                     for (int i = 1; i < 12 - hour; i++) {
                         list_time.add((hour - 6 + i) + "");
                     }
+                }else if(hour < 6) {
+                    for(int i = 1; i <= 5; i++) {
+                        list_time.add(""+i);
+                    }
                 }
             }else {
                 if(hour >= 12 && hour < 17) {
                     for (int i = 1; i < 18 - hour; i++) {
                         list_time.add((hour - 7 + i) + "");
+                    }
+                }else if(hour < 12){
+                    for(int i = 6; i <=10; i++) {
+                        list_time.add(i+"");
                     }
                 }
             }
