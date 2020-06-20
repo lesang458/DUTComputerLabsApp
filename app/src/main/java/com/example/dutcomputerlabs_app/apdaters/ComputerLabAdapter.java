@@ -2,7 +2,6 @@ package com.example.dutcomputerlabs_app.apdaters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -150,6 +149,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         bookingService = ApiUtils.getBookingService();
+
                         Date date = new Date();
                         try {
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -157,6 +157,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+
                         SharedPreferences pref = mContext.getSharedPreferences("PREF", Context.MODE_PRIVATE);
                         String token = pref.getString("token","");
                         int id = pref.getInt("bookingId",0);
@@ -200,7 +201,6 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                 String token = pref.getString("token","");
 
                 FeedbackService feedbackService = ApiUtils.getFeedbackService();
-
                 feedbackService.getTotalPages(token,computerLab.getId())
                         .enqueue(new Callback<ResponseBody>() {
                             @Override
@@ -229,6 +229,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                             recyclerView.setLayoutManager(linearLayoutManager);
 
                                             if( page == 1){
+
                                                 spinner.setVisibility(View.INVISIBLE);
                                                 text_page.setText(page+"");
                                                 feedbackService.getFeedbacks(token,computerLab.getId(),1)
@@ -249,6 +250,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                                         });
 
                                             }else {
+
                                                 List<Integer> list_pages = new ArrayList<>();
                                                 for(int i = 1; i <= page; i++) {
                                                     list_pages.add(i);
@@ -277,6 +279,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                                                         DialogUtils.showDialog("Không thể kết nối đến máy chủ. Kiểm tra kết nối internet.","Lỗi",mContext);
                                                                     }
                                                                 });
+                                                        text_page.setText(spinner.getSelectedItem()+"");
                                                     }
 
                                                     @Override
