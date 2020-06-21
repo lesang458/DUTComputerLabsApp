@@ -10,7 +10,7 @@
 
     <string name="menu_user_detail">Thông tin cá nhân</string>
     <string name="menu_change_password">Đổi mật khẩu</string>
-    <string name="login">Login</string>
+    <string name="login">Đăng nhập</string>
     <string name="password">Password:</string>
     <string name="username">Username:</string>
     <string name="enter_your_old_password">Enter your old password:</string>
