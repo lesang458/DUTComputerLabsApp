@@ -1,6 +1,7 @@
 package com.example.dutcomputerlabs_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -52,6 +54,21 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
         TextView text_name = header.findViewById(R.id.text_name);
         text_name.setText("Welcome, "+pref.getString("username",""));
+
+        Button btn_logout = header.findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pref.edit().remove("token").apply();
+                pref.edit().remove("username").apply();
+                pref.edit().remove("password").apply();
+                pref.edit().remove("id").apply();
+
+                Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+                startActivity(intent);
+                HomeActivity.this.finish();
+            }
+        });
     }
 
     @Override
@@ -85,5 +102,15 @@ public class HomeActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onDestroy() {
+        SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
+        pref.edit().remove("token").apply();
+        pref.edit().remove("username").apply();
+        pref.edit().remove("password").apply();
+        pref.edit().remove("id").apply();
+        super.onDestroy();
     }
 }
