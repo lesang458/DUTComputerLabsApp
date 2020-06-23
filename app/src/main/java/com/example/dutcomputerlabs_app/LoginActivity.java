@@ -69,9 +69,9 @@ public class LoginActivity extends AppCompatActivity {
                     authService.login(user).enqueue(new Callback<UserToken>() {
                         @Override
                         public void onResponse(Call<UserToken> call, Response<UserToken> response) {
-                            if(response.isSuccessful()){
+                            if(response.isSuccessful()) {
                                 userToken = response.body();
-                                if(userToken.getUser().getRole().equals("LECTURER")) {
+                                if(!userToken.getUser().getRole().equals("ADMIN")) {
                                     SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
                                     pref.edit().putString("token","Bearer "+userToken.getToken()).apply();
                                     pref.edit().putString("password",pass_word).apply();

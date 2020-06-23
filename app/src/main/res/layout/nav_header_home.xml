@@ -32,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border"
+        android:textAllCaps="false"
+        android:background="@drawable/border_button"
         android:textColor="@color/colorBlack"
         android:text="Đăng xuất"
         />

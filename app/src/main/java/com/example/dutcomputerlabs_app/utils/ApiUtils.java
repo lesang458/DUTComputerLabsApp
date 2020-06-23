@@ -4,6 +4,7 @@ import com.example.dutcomputerlabs_app.network.RetrofitClient;
 import com.example.dutcomputerlabs_app.network.services.AuthService;
 import com.example.dutcomputerlabs_app.network.services.BookingService;
 import com.example.dutcomputerlabs_app.network.services.FeedbackService;
+import com.example.dutcomputerlabs_app.network.services.NotificationService;
 import com.example.dutcomputerlabs_app.network.services.UserService;
 
 
@@ -24,5 +25,9 @@ public class ApiUtils {
 
     public static FeedbackService getFeedbackService(){
         return RetrofitClient.getClient(BASE_URL).create(FeedbackService.class);
+    }
+
+    public static NotificationService getNotificationService(){
+        return RetrofitClient.getClient(BASE_URL).create(NotificationService.class);
     }
 }

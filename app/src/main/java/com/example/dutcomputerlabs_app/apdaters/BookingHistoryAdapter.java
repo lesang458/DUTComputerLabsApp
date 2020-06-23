@@ -118,7 +118,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingViewHolde
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        if(response.isSuccessful()){
+                                        if(response.isSuccessful()) {
                                             DialogUtils.showDialog("Hủy đặt phòng thành công","Thông báo",mContext);
                                             booking.setStatus("Đã hủy");
                                             notifyDataSetChanged();
@@ -243,7 +243,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingViewHolde
                                     .enqueue(new Callback<FeedbackForDetailed>() {
                                         @Override
                                         public void onResponse(Call<FeedbackForDetailed> call, Response<FeedbackForDetailed> response) {
-                                            if(response.isSuccessful()){
+                                            if(response.isSuccessful()) {
                                                 alertDialog.dismiss();
                                                 DialogUtils.showDialog("Gửi phản hồi thành công","Thông báo",mContext);
                                                 booking.setFeedback(response.body());

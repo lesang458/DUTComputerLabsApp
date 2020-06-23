@@ -120,7 +120,7 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         if(response.isSuccessful()) {
                                             DialogUtils.showDialog("Đặt phòng thành công","Thông báo",mContext);
-                                            clearData();
+                                            Navigation.findNavController((Activity) mContext, R.id.nav_host_fragment).navigate(R.id.nav_booking_history);
                                         }else {
                                             DialogUtils.showDialog(response.toString(),"Lỗi",mContext);
                                         }
@@ -167,7 +167,6 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         if(response.isSuccessful()) {
                                             DialogUtils.showDialog("Cập nhật thành công","Thông báo",mContext);
-                                            clearData();
                                             pref.edit().remove("editMode").apply();
                                             Navigation.findNavController((Activity) mContext, R.id.nav_host_fragment).navigate(R.id.nav_booking_history);
                                         }else {
@@ -324,11 +323,6 @@ public class ComputerLabAdapter extends RecyclerView.Adapter<ComputerLabViewHold
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public void clearData() {
-        list.clear();
-        notifyDataSetChanged();
     }
 }
 class ComputerLabViewHolder extends RecyclerView.ViewHolder{

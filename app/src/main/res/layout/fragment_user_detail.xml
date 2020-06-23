@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@drawable/background"
     tools:context=".ui.UserDetail.UserDetailFragment">
 
     <LinearLayout
@@ -36,6 +36,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:textColor="@color/colorBlack"
+            android:drawableStart="@drawable/ic_name"
             android:imeOptions="actionDone"
             android:enabled="false"
             android:singleLine="true"
@@ -61,17 +62,22 @@
                     android:layout_width="150dp"
                     android:layout_height="45dp"
                     android:layout_marginStart="20dp"
+                    android:drawableStart="@drawable/ic_birthday"
                     android:background="@drawable/border"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
             </LinearLayout>
+
             <ImageButton
                 android:id="@+id/btn_date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="@color/colorWhite"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/background"
                 android:src="@drawable/date_picker_icon" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,6 +96,7 @@
                         android:id="@+id/gender"
                         android:layout_width="100dp"
                         android:layout_height="45dp"
+                        android:drawableStart="@drawable/ic_gender"
                         android:background="@drawable/border"
                         android:textColor="@color/colorBlack"
                         android:textSize="20sp" />
@@ -120,6 +127,7 @@
                 android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:textSize="20sp"
+                android:drawableStart="@drawable/ic_faculty"
                 android:textColor="@color/colorBlack"
                 android:background="@drawable/border"
                 android:layout_marginStart="20dp" />
@@ -149,6 +157,7 @@
             android:singleLine="true"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
+            android:drawableStart="@drawable/ic_contact_phone"
             android:background="@drawable/border" />
         <TextView
             android:layout_width="match_parent"
@@ -168,6 +177,7 @@
             android:singleLine="true"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
+            android:drawableStart="@drawable/ic_email"
             android:background="@drawable/border" />
 
         <TextView
@@ -185,7 +195,6 @@
             android:layout_marginEnd="20dp"
             android:inputType="textMultiLine"
             android:enabled="false"
-            android:imeOptions="actionDone"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             android:background="@drawable/border" />
@@ -202,6 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/border_button"
+                android:textAllCaps="false"
                 android:text="Chỉnh sửa"
                 android:textSize="20sp" />
             <Button
@@ -212,6 +222,7 @@
                 android:background="@drawable/border_button"
                 android:layout_marginEnd="10dp"
                 android:visibility="invisible"
+                android:textAllCaps="false"
                 android:text="Quay lại"
                 android:textSize="20sp" />
 
@@ -222,6 +233,7 @@
                 android:background="@drawable/border_button"
                 android:textSize="20sp"
                 android:visibility="invisible"
+                android:textAllCaps="false"
                 android:text="Lưu"
                 android:layout_alignParentRight="true" />
 

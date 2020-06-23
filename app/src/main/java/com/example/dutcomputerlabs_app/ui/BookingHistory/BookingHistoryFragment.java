@@ -82,7 +82,7 @@ public class BookingHistoryFragment extends Fragment {
         bookingService.getTotalPages(token).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful()) {
                     JSONObject object = null;
                     try {
                         object = new JSONObject(response.body().string());
