@@ -263,6 +263,7 @@ public class UserDetailFragment extends Fragment {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                check = false;
                 showInfo();
             }
         });
