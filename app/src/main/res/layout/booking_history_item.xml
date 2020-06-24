@@ -137,7 +137,7 @@
 
             <Button
                 android:id="@+id/btn_detail"
-                android:layout_width="282dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border_button"
                 android:textSize="20sp"

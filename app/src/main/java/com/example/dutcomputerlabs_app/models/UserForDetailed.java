@@ -10,6 +10,8 @@ public class UserForDetailed {
     @Expose
     private String name;
     @Expose
+    private String photoUrl;
+    @Expose
     private Date birthday;
     @Expose
     private String gender;
@@ -26,9 +28,10 @@ public class UserForDetailed {
     @Expose
     private String role;
 
-    public UserForDetailed(int id, String name, Date birthday, String gender, String faculty, String phoneNumber, String email, String address, String username, String role) {
+    public UserForDetailed(int id, String name, String photoUrl, Date birthday, String gender, String faculty, String phoneNumber, String email, String address, String username, String role) {
         this.id = id;
         this.name = name;
+        this.photoUrl = photoUrl;
         this.birthday = birthday;
         this.gender = gender;
         this.faculty = faculty;
@@ -53,6 +56,14 @@ public class UserForDetailed {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getGender() {

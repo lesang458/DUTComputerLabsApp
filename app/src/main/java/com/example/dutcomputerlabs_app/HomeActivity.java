@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -44,6 +46,7 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -65,28 +68,46 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
 
         View header = navigationView.getHeaderView(0);
         SharedPreferences pref = getSharedPreferences("PREF",MODE_PRIVATE);
         TextView text_name = header.findViewById(R.id.text_name);
         text_name.setText("Welcome, "+pref.getString("username",""));
 
-        Button btn_logout = header.findViewById(R.id.btn_logout);
-        btn_logout.setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                pref.edit().remove("token").apply();
-                pref.edit().remove("username").apply();
-                pref.edit().remove("password").apply();
-                pref.edit().remove("id").apply();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.btn_logout:
+                        pref.edit().remove("token").apply();
+                        pref.edit().remove("username").apply();
+                        pref.edit().remove("password").apply();
+                        pref.edit().remove("id").apply();
 
-                Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
-                startActivity(intent);
-                HomeActivity.this.finish();
+                        Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        HomeActivity.this.finish();
+                        break;
+                    case R.id.nav_user_detail:
+                        navController.navigate(R.id.nav_user_detail);
+                        break;
+                    case R.id.nav_change_password:
+                        navController.navigate(R.id.nav_change_password);
+                        break;
+                    case R.id.nav_booking:
+                        navController.navigate(R.id.nav_booking);
+                        break;
+                    case R.id.nav_booking_history:
+                        navController.navigate(R.id.nav_booking_history);
+                        break;
+                }
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
         });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,6 +186,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return;
     }
 

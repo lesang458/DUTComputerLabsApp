@@ -8,6 +8,8 @@ public class UserForInsert {
     @Expose
     private String name;
     @Expose
+    private String photo;
+    @Expose
     private Date birthday;
     @Expose
     private boolean gender;
@@ -26,8 +28,9 @@ public class UserForInsert {
     @Expose
     private String role;
 
-    public UserForInsert(String name, Date birthday, boolean gender, com.example.dutcomputerlabs_app.models.Faculty faculty, String phoneNumber, String email, String address, String username, String password, String role) {
+    public UserForInsert(String name, String photo, Date birthday, boolean gender, Faculty faculty, String phoneNumber, String email, String address, String username, String password, String role) {
         this.name = name;
+        this.photo = photo;
         this.birthday = birthday;
         this.gender = gender;
         this.faculty = faculty;
@@ -45,6 +48,14 @@ public class UserForInsert {
 
     public void setName(String name) {
         name = name;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public Date getBirthday() {

@@ -13,16 +13,16 @@
     <string name="login">Đăng nhập</string>
     <string name="password">Password:</string>
     <string name="username">Username:</string>
-    <string name="enter_your_old_password">Enter your old password:</string>
-    <string name="confirm_your_new_password">Confirm your new password</string>
+    <string name="enter_your_old_password">Nhập mật khẩu cũ:</string>
+    <string name="confirm_your_new_password">Xác nhận mật khẩu mới:</string>
     <string name="Save">Save</string>
-    <string name="enter_your_new_password">Enter your new password</string>
+    <string name="enter_your_new_password">Nhập mật khẩu mới:</string>
     <string name="name">Họ và tên:</string>
     <string name="birthday">Ngày sinh:</string>
     <string name="gender">Giới tính:</string>
     <string name="faculty">Khoa:</string>
     <string name="phone_number">Số điện thoại:</string>
-    <string name="email">Email</string>
+    <string name="email">Email:</string>
     <string name="address">Địa chỉ:</string>
     <string name="menu_booking">Đặt phòng</string>
 

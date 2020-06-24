@@ -1,10 +1,17 @@
 package com.example.dutcomputerlabs_app.ui.UserDetail;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.dutcomputerlabs_app.models.Faculty;
 import com.example.dutcomputerlabs_app.models.UserForDetailed;
 import com.example.dutcomputerlabs_app.R;
@@ -28,7 +37,10 @@ import com.example.dutcomputerlabs_app.models.UserForInsert;
 import com.example.dutcomputerlabs_app.utils.ApiUtils;
 import com.example.dutcomputerlabs_app.network.services.UserService;
 import com.example.dutcomputerlabs_app.utils.DialogUtils;
+import com.google.android.material.navigation.NavigationView;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +56,8 @@ import retrofit2.Response;
 
 public class UserDetailFragment extends Fragment {
 
+    private static final int GALLERY_CODE = 123;
+
     private UserForDetailed userDetail;
     private UserService userService;
     private int id;
@@ -58,17 +72,18 @@ public class UserDetailFragment extends Fragment {
 
     private EditText name, phone_number, email, address;
     private Spinner spinner_gender, spinner_faculty;
-    private TextView gender , faculty, birthday, title;
+    private TextView gender , faculty, birthday;
     private Button btn_back, btn_change_info, btn_save_change;
     private ImageButton btn_date_picker;
+    private ImageView imageView;
+
+    private boolean check = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_user_detail,container,false);
-
-        title = root.findViewById(R.id.title_user_detail);
         name = root.findViewById(R.id.name);
         birthday = root.findViewById(R.id.birthday);
         gender = root.findViewById(R.id.gender);
@@ -82,6 +97,7 @@ public class UserDetailFragment extends Fragment {
         btn_change_info = root.findViewById(R.id.btn_change_info);
         btn_save_change = root.findViewById(R.id.btn_save_change_info);
         btn_date_picker = root.findViewById(R.id.btn_date_picker);
+        imageView = root.findViewById(R.id.image_avatar);
 
         return  root;
     }
@@ -201,21 +217,42 @@ public class UserDetailFragment extends Fragment {
                     DialogUtils.showDialog("Vui lòng nhập đủ thông tin.","Thông báo",getActivity());
                 }
                 if(!name_update.equals("") && !phone_number_update.equals("") && !email_update.equals("") && !address_update.equals("")) {
-                    UserForInsert userForInsert = new UserForInsert(name_update,birthday_update,gender_update,faculty_update,phone_number_update,email_update,address_update,userDetail.getUsername(),pass_word,userDetail.getRole());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Thông báo")
+                            .setMessage("Đang cập nhật....")
+                            .setCancelable(false);
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    String imageString = null;
+                    if(check){
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100, stream);
+
+                        byte[] imageBytes = stream.toByteArray();
+                        imageString = android.util.Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    }
+                    UserForInsert userForInsert = new UserForInsert(name_update,imageString,birthday_update,gender_update,faculty_update,phone_number_update,email_update,address_update,userDetail.getUsername(),pass_word,userDetail.getRole());
                     userService.updateUserInfo(token,id,userForInsert).enqueue(new Callback<UserForDetailed>() {
                         @Override
                         public void onResponse(Call<UserForDetailed> call, Response<UserForDetailed> response) {
                             if(response.isSuccessful()){
                                 userDetail = response.body();
+                                alertDialog.dismiss();
                                 DialogUtils.showDialog("Bạn đã cập nhật thành công","Thông báo",getActivity());
                                 showInfo();
                             }else {
+                                alertDialog.dismiss();
                                 DialogUtils.showDialog(response.toString(),"Lỗi",getActivity());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<UserForDetailed> call, Throwable t) {
+                            alertDialog.dismiss();
                             DialogUtils.showDialog("Không thể kết nối đến máy. Kiểm tra kết nối internet.","Lỗi",getActivity());
                         }
                     });
@@ -229,12 +266,52 @@ public class UserDetailFragment extends Fragment {
                 showInfo();
             }
         });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Chọn 1 bức hình"), GALLERY_CODE);
+            }
+        });
     }
 
-    public void showInfo(){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GALLERY_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            CropImage.activity(data.getData()).setAspectRatio(1,1).start(getContext(),this);
+        }
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                Uri imageUri = CropImage.getActivityResult(data).getUri();
+                imageView.setImageURI(imageUri);
+                check = true;
+            }
+        }
+    }
 
-        title.setText("Thông tin cá nhân");
+    private void showInfo(){
         if(userDetail != null) {
+            if(userDetail.getPhotoUrl() != null){
+                Glide.with(getContext())
+                        .load(userDetail.getPhotoUrl())
+                        .error(getActivity().getDrawable(R.drawable.user_detail_logo))
+                        .into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.user_detail_logo);
+            }
+
+            NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+            View header = navigationView.getHeaderView(0);
+            ImageView image = header.findViewById(R.id.imageView);
+            if(image.getDrawable() != imageView.getDrawable()){
+                image.setImageDrawable(imageView.getDrawable());
+            }
+            imageView.setEnabled(false);
+
             name.setEnabled(false);
             name.setText(userDetail.getName());
             birthday.setText(dateFormat.format(userDetail.getBirthday()));
@@ -255,9 +332,9 @@ public class UserDetailFragment extends Fragment {
         btn_save_change.setVisibility(View.INVISIBLE);
     }
 
-    public void editInfo(){
-        title.setText("Chỉnh sửa thông tin cá nhân");
+    private void editInfo(){
         spinner_faculty.setSelection(getIndex(spinner_faculty, userDetail.getFaculty()));
+        imageView.setEnabled(true);
         name.setEnabled(true);
         btn_date_picker.setVisibility(View.VISIBLE);
         spinner_gender.setVisibility(View.VISIBLE);
